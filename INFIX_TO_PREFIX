@@ -1,0 +1,114 @@
+#include<stdio.h>
+#include<conio.h>
+#include<string.h>
+#define MAX 50
+
+char infix[MAX];
+char prefix[MAX];
+int stack[MAX];
+int top=0;
+
+void intop();
+int pop();
+int prec(int);
+void push(int);
+
+void main()
+{
+	clrscr();
+	printf("\nWelcome To Infix To Prefix Program By Ankit Verma\n");
+	printf("\nEnter Infix Expression: ");
+	gets(infix);
+	fflush(stdin);
+	strrev(infix);
+	intop();
+	getch();
+}
+
+void push(int symbol)
+{
+	if(top>MAX)
+	{
+		printf("\nStack Overflow !!!");
+		getch();
+		exit(1);
+	}
+	else
+	{
+		top=top+1;
+		stack[top]=symbol;
+	}
+}
+
+int pop()
+{
+	if(top==0)
+	{
+		printf("\nStack Empty !!!");
+		getch();
+		exit(2);
+	}
+	else
+		return(stack[top--]);
+	return 0;
+}
+
+int prec(int symbol)
+{
+	switch(symbol)
+	{
+		case '(':
+			return 0;
+		case '+':
+		case '-':
+			return 1;
+		case '/':
+		case '*':
+			return 2;
+		case '^':
+			return 3;
+	}
+	return 0;
+}
+
+void intop()
+{
+	int i,p=0,pre,len,next;
+	stack[top]='#';
+	len=strlen(infix);
+	infix[len]='#';
+	for(i=0;infix[i]!='#';i++)
+	{
+		switch(infix[i])
+		{
+			case ')':
+				push(infix[i]);
+				break;
+			case '(':
+				while((next=pop())!=')')
+				prefix[p++]=next;
+				break;
+			case '+':
+			case '*':
+			case '/':
+			case '-':
+			case '^':
+				pre=prec(infix[i]);
+				while(stack[top]!='#'&&pre<=prec(stack[top]))
+				{
+					prefix[p++]=pop();
+				}
+				push(infix[i]);
+				break;
+			default:
+				prefix[p++]=infix[i];
+		}
+	}
+	while(stack[top]!='#')
+	prefix[p++]=pop();
+	prefix[p]='\0';
+	strrev(prefix);
+	printf("\nAfter Converting Infix To Prefix Expression: ");
+	puts(prefix);
+}
+
