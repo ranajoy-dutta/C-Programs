@@ -13,7 +13,7 @@ void main()
 {
 	char infix[25];
 	clrscr();
-	printf("\nWelcome To Infix To Postfix Program By\n");
+	printf("\nWelcome To Infix To Postfix Program\n");
 	printf("\nEnter Infix Expression: ");
 	gets(infix);
 	in_to_post(infix);
